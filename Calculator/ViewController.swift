@@ -25,34 +25,22 @@ class ViewController: UIViewController {
     
     @IBAction func numberAction(sender: UIButton) {
         if isClear {
-            outToLabel(sender.titleLabel!.text!, sign)
+            outToLabel(sender.titleLabel!.text!, sign:sign)
             isClear = false
         } else {
-            outToLabel(outputLabel.text! + sender.titleLabel!.text!, sign)
+            outToLabel(outputLabel.text! + sender.titleLabel!.text!, sign:sign)
         }
     }
     
     @IBAction func commandAction(sender: UIButton) {
         if let tmpSign = sign {
-            num = doWork(num, (outputLabel.text! as NSString).doubleValue, tmpSign)
+            num = doWork(num, num2:(outputLabel.text! as NSString).doubleValue, sign:tmpSign)
+        } else {
+            num = (outputLabel.text! as NSString).doubleValue
         }
-        
-        if Signs.Plus.rawValue == sender.titleLabel!.text! {
-            sign=Signs.Plus
-        }
-        else if(Signs.Munis.rawValue == sender.titleLabel!.text!) {
-            sign=Signs.Munis
-        }
-        else if(Signs.Divide.rawValue == sender.titleLabel!.text!) {
-            sign=Signs.Divide
-        }
-        else if(Signs.Multiply.rawValue == sender.titleLabel!.text!) {
-            sign=Signs.Multiply
-        }
-        
+        sign = getSign(sender.titleLabel!.text!)
         isClear = true
-        num = outputLabel.text!.toInt()!
-        signOutputLabel.text! = sender.titleLabel!.text!
+        outToLabel("\(num)", sign:sign)
     }
     
     @IBAction func clear(sender: UIButton) {
@@ -65,6 +53,22 @@ class ViewController: UIViewController {
     func outToLabel(numValue: String, sign:Signs?) {
         outputLabel.text! = numValue
         signOutputLabel.text! = "\(sign?.rawValue)"
+    }
+    
+    func getSign(value: String) -> Signs? {
+        if Signs.Plus.rawValue == value {
+            return Signs.Plus
+        }
+        else if(Signs.Minis.rawValue == value) {
+            return Signs.Minis
+        }
+        else if(Signs.Divide.rawValue == value) {
+            return Signs.Divide
+        }
+        else if(Signs.Multiply.rawValue == value) {
+            return Signs.Multiply
+        }
+        return nil
     }
     
     func doWork(num1:Double, num2:Double, sign:Signs) -> Double {
